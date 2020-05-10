@@ -1,5 +1,4 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-
 #include <iostream>
 #include <ctime>
 #include <string>
@@ -9,13 +8,8 @@
 #include <direct.h>
 #include <fstream>
 #include <conio.h>
-
 constexpr auto _MONTH = 30*24*60*60;
-
-
 using namespace std;
-
-
 string parseStringToSpace(string str)
 {
     for (auto& it : str)
@@ -24,7 +18,6 @@ string parseStringToSpace(string str)
     }
     return str;
 }
-
 string parseStringToUnderline(string str)
 {
     for (auto& it : str)
@@ -33,9 +26,6 @@ string parseStringToUnderline(string str)
     }
     return str;
 }
-
-
-
 string getText(string msg)
 {
     while (true)
@@ -54,12 +44,8 @@ string getText(string msg)
             return temp;
         }
     }
-
 }
-
-//template<typename type > type getValue(std::string s, bool clear = false);
-template<typename type>
-type getValue(std::string s, bool clear = false)
+template<typename type>type getValue(std::string s, bool clear = false)
 {
     while (true)
     {
@@ -78,10 +64,7 @@ type getValue(std::string s, bool clear = false)
         else return a;
     }
 }
-
-
-template<typename type>
-type getValue(std::string s, void(*moo)(void), bool clear = false)
+template<typename type>type getValue(std::string s, void(*moo)(void), bool clear = false)
 {
     while (true)
     {
@@ -104,10 +87,6 @@ type getValue(std::string s, void(*moo)(void), bool clear = false)
         }
     }
 }
-
-
-
-
 class Date
 {
 private:
@@ -124,7 +103,6 @@ public:
     friend bool operator<= (const Date& d1, const Date& d2);
     friend void operator+= (Date& d1, Date& d2);
     friend void operator+= (Date& d1, time_t t);
-
     void setDate(time_t tm);
     time_t getDate();
     string getStringDate();
@@ -132,7 +110,6 @@ public:
     Date(time_t t);
     Date(tm atm);
 };
-
 class Document
 {
 protected:
@@ -143,14 +120,12 @@ protected:
     Document();
     Document(Date date, string author, string title, string content);
 public:
-
     virtual void printFullInfo() = 0;
     void printMinInfo();
     string getAuthor()
     {
         return _author;
     }
-
     string getSuchString()
     {
         string response = "";
@@ -161,8 +136,6 @@ public:
         return response;
     }
 };
-
-
 class InputDocument: public Document
 {
 private:
@@ -176,17 +149,14 @@ public:
     InputDocument(Date date, string author, string title, string content);
     InputDocument(Date date, string author, string title, string content, Date dateReply) :InputDocument(date, author, title, content) { setTimeToReply(dateReply.getDate()); };
     void setTimeToReply(int days, int hours, int minutes);
-
     void setTimeToReply(time_t Date)
     {
         _dateReply = Date;
     }
-
     Date getDateReply()
     {
         return _dateReply;
     }
-
     string getSuchString()
     {
         string response = "";
@@ -194,9 +164,7 @@ public:
         response += to_string(_date.getDate());
         return response;
     }
-    
 };
-
 class OutputDocument : public Document
 {
 private:
@@ -207,9 +175,6 @@ public:
     OutputDocument(Date date, string author, string title, string content, string rank);
     void setRank(string rank);
     string getRank();
-
-    
-
     string getSuchString()
     {
         string response = "";
@@ -217,11 +182,7 @@ public:
         response += _rank;
         return response;
     }
-
-
-
 };
-
 class Dispatch
 {
 private:
@@ -230,7 +191,6 @@ private:
     OutputDocument _outDoc;
     bool _isReply = false;
 public:
-    //Dispatch();
     Dispatch(int id, InputDocument inputDocument);
     Dispatch(int id, InputDocument inputDocument, OutputDocument outputDocument);
     Dispatch(int id, OutputDocument outputDocument, InputDocument inputDocument) :Dispatch(id, inputDocument, outputDocument) {};
@@ -241,17 +201,14 @@ public:
     {
         return _id;
     }
-
     bool getReply()
     {
         return _isReply;
     }
-
     Date getReplyDate()
     {
         return _inDoc.getDateReply();
     }
-
     string getOutDocAuthor()
     {
         return _outDoc.getAuthor();
@@ -260,17 +217,13 @@ public:
     {
         return _inDoc.getAuthor();
     }
-
-
     string getOutputDocAuthorSuchString()
     {
         return _outDoc.getAuthor();
     }
-
     string getSuchString()
     {
         string response = "";
-
         
         if (_isReply)
         {
@@ -288,11 +241,7 @@ public:
         }
         return response;
     }
-
 };
-
-
-
 class Correspond
 {
 private:
@@ -316,7 +265,6 @@ public:
         }
         
     }
-
     void addDispatch(Dispatch dispatch)
     {
         _dispatches.push_back(dispatch);
@@ -324,7 +272,6 @@ public:
     void removeDispatch(int id)
     {
         bool removed = false;
-
         for (int i = 0; i < _dispatches.size(); i++)
         {
             if (_dispatches[i].getId() == id)
@@ -349,7 +296,6 @@ public:
             if (it.getId() == id) it.addReply(OutDoc);
         }
     }
-
     void PrintFull(int id)
     {
         for (auto it : _dispatches)
@@ -362,10 +308,6 @@ public:
         }
         cout << "Корреспонденций с таким номером не найдено" << endl;
     }
-
-    
-
-
     void PrintFullByInDocAuthor(string author)
     {
         vector<Dispatch> vec;
@@ -382,8 +324,6 @@ public:
         }
         if(vec.size() == 0)cout << "Корреспонденций от " << author << " не найдено" << endl;
     }
-
-
     void PrintFullExpired()
     {
         vector<Dispatch> vec;
@@ -400,8 +340,6 @@ public:
         }
         if (vec.size() == 0)cout << "Просроченных корреспонденций нет" << endl;
     }
-
-
     void PrintFullOutDoc(string author)
     {
         for (auto it : _dispatches)
@@ -414,7 +352,6 @@ public:
         }
         cout << "Заявлений этого сотрудника не найдено" << endl;
     }
-
     void PrintFullInDoc(string author)
     {
         for (auto it : _dispatches)
@@ -427,7 +364,6 @@ public:
         }
         cout << "Заявлений этого отправителя не найдено" << endl;
     }
-
     void printFullAllNoreply()
     {
         for (auto it : _dispatches)
@@ -438,11 +374,9 @@ public:
             }
         }
     }
-
     int getMaxId()
     {
         int max = 0;
-
         for (auto it : _dispatches)
         {
             if (max < it.getId())
@@ -452,33 +386,25 @@ public:
         }
         return max;
     }
-
     void Save()
     {
-
         std::ofstream fp;
         fp.open(_path, std::ios_base::trunc | std::ios::out);
-
-
         for (auto it : _dispatches)
         {
             fp << it.getSuchString() << endl;
         }
         fp.close();
     }
-
     void Load()
     {
         
-
         std::ifstream fp;
         fp.open(_path);
-
         while (!fp.eof())
         {
             string reply = "";
             fp >> reply;
-
             if (reply == "reply")
             {
                 int id = 0;
@@ -493,23 +419,17 @@ public:
                 fp >> theme;
                 fp >> content;
                 fp >> replyDate;
-
                 time_t tm2 = 0;
                 string author2 = "";
                 string theme2 = "";
                 string content2 = "";
                 string rank2 = "";
-
                 fp >> tm2;
                 fp >> author2;
                 fp >> theme2;
                 fp >> content2;
                 fp >> rank2;
-
-                
-                addDispatch(Dispatch(id,
-                                InputDocument(Date(tm), parseStringToSpace(author), parseStringToSpace(theme), parseStringToSpace(content), Date(replyDate)), 
-                                OutputDocument(Date(tm2),author2,theme2,content2,rank2)));
+                addDispatch(Dispatch(id,InputDocument(Date(tm), parseStringToSpace(author), parseStringToSpace(theme), parseStringToSpace(content), Date(replyDate)), OutputDocument(Date(tm2),author2,theme2,content2,rank2)));
             }
             else if (reply == "notreply")
             {
@@ -525,17 +445,12 @@ public:
                 fp >> theme;
                 fp >> content;
                 fp >> replyDate;
-
                 addDispatch(Dispatch(id,
                                 InputDocument(Date(tm), parseStringToSpace(author), parseStringToSpace(theme), parseStringToSpace(content), Date(replyDate))));
             }
         }
-
-
         fp.close();
     }
-
-
     bool idExsist(int id)
     {
         for (auto it : _dispatches)
@@ -544,11 +459,7 @@ public:
         }
         return false;
     }
-
 };
-
-
-
 class Menu
 {
 public:
@@ -565,10 +476,8 @@ public:
             printf("|0.Выход                                                                                                        |\n");
             printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
             
-
             mode = _getch();
         }
-
         switch (mode)
         {
         case 48:
@@ -582,14 +491,10 @@ public:
             break;
         }
         
-
         return mode;
     }
-
     static int Menu11()
     {
-
-
         int mode = -1;
         while (!(mode == 48 || mode == 49 || mode == 50))
         {
@@ -599,37 +504,24 @@ public:
             printf("|2.Посмотреть мои заявления                                                                                     |\n");
             printf("|0.Назад                                                                                                        |\n");
             printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
-
-
             mode = _getch();
         }
-
         switch (mode)
         {
         case 48:
             return 0;
             break;
         case 49:
-            ///TODO Окно отправки заявления
             return 1;
             break;
         case 50:
-            ///TODO Список моих заявлений
             return 2;
             break;
         }
-
-
         return mode;
     }
-
-
     static int Menu12()
     {
-
-
-
-
         int mode = -1;
         while (!(mode == 48 || mode == 49 || mode == 50 || mode == 51 || mode == 52 || mode == 53))
         {
@@ -642,11 +534,8 @@ public:
             printf("|5.Посмотреть корреспонденцию                                                                                   |\n");
             printf("|0.Назад                                                                                                        |\n");
             printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
-
-
             mode = _getch();
         }
-
         switch (mode)
         {
         case 48:
@@ -668,12 +557,8 @@ public:
             return 5;
             break;
         }
-
-
         return mode;
     }
-    
-    
     static int Menu111(Correspond &correspond, string author)
     {
         system("cls");
@@ -688,28 +573,22 @@ public:
     static int Menu112(Correspond correspond, string author)
     {
         system("cls");
-        //cout << "Список моих заявлений" << endl;
-        
         correspond.PrintFullByInDocAuthor(author);
         system("pause");
         return 0;
     }
-
     static int Menu121(Correspond& correspond, string author, string rank)
     {
         system("cls");
-        //cout << "Ответить на заявление" << endl;
         int id = 0;
         string title = "", content = "";
         id = getValue<int>("ID корреспонденции:");
-
         if (!correspond.idExsist(id))
         {
             cout << "Такая корреспонденция не найдена" << endl;
             system("pause");
             return -1;
         }
-
         title = getText("Тема:");
         content = getText("Содержание:");
         
@@ -719,14 +598,12 @@ public:
     }
     static int Menu122(Correspond& correspond)
     {
-        
         correspond.printAllMin();
         system("pause");
         return 0;
     }
     static int Menu123(Correspond correspond)
     {
-        //cout << "Не отвеченная корреспонденция" << endl;
         correspond.printFullAllNoreply();
         system("pause");
         return 0;
@@ -734,7 +611,6 @@ public:
     static int Menu124(Correspond correspond)
     {
         system("cls");
-        //cout << "Просроченная корреспонденция" << endl;
         correspond.PrintFullExpired();
         system("pause");
         return 0;
@@ -746,13 +622,7 @@ public:
         system("pause");
         return 0;
     }
-
-
-
 };
-
-
-
 int main()
 {
     setlocale(LC_ALL, "");
@@ -761,42 +631,15 @@ int main()
     HWND hwnd = GetConsoleWindow();
     RECT rect = { 100, 100, 500, 945 };
     MoveWindow(hwnd, rect.top, rect.left, rect.bottom - rect.top, rect.right - rect.left, TRUE);
-
-
-
-
     auto cor = Correspond();
-    /*
-    cor.addDispatch(Dispatch(1, 
-        OutputDocument(Date(time(0)),"Шайда", "Принимаю", "Всё хорошо, можешь оформлять","Доцент"), 
-        InputDocument(Date(time(0)),"Леднев Евгений","ФИТУ 1-5","Высылаю лабораторные работы")));
-
-    cor.addDispatch(Dispatch(2,
-        OutputDocument(Date(time(0)+13300), "Иванченко", "Принял", "Всё хорошо, оформляй отчёт", "Начальник ИБ"),
-        InputDocument(Date(time(0)+235344), "Ускорников Даниил", "Рпиа-19о", "Вот мои лабораторные работы")));
-
-
-    cor.addDispatch(Dispatch(3,
-        InputDocument(Date(time(0) + 435344), "Ускорников Даниил", "Рпиа-19о", "Вот мои лабораторные работы")));
-    */
-
-
-    //
     cor.Load();
-    
-    
-    //cor.addDispatch(Dispatch(2,OutputDocument(Date(time(0)), "Пупкин", "Ну чо там с деньгами?", "Ну дарова пупкин залупкин", "Старший лейтенант"),InputDocument(Date(time(0)), "Петров Иван", "Не пиши сюда больше", "Какое-то содеражние ляляля")));
-
-    
     int mainMode = -1;
     int mode1 = -1;
     int mode2 = -1;
-
     while (mainMode != 0)
     {
         mainMode = Menu::Menu1();
         string tempAuthor;
-
         string nameStaff;
         string rankStaff;
         switch (mainMode)
@@ -805,24 +648,20 @@ int main()
             system("cls");
             printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
             tempAuthor = getText("Ваше имя:");
-            
             do
             {
                 mode1 = Menu::Menu11();
                 switch (mode1)
                 {
-
                 case 1:
                     Menu::Menu111(cor, tempAuthor);
                     break;
                 case 2:
-
                     
                     Menu::Menu112(cor,tempAuthor);
                     break;
                 }
             } while (mode1 !=0);
-
             break;
         case 2:
             system("cls");
@@ -853,7 +692,6 @@ int main()
                     break;
                 }
             } while (mode2 != 0);
-
             break;
         case 0:
             cor.Save();
@@ -861,26 +699,16 @@ int main()
             break;
         }
     }
-  
-
-    
-
     cor.Save();
-    
-
-   
 }
-
 void Date::setDate(time_t tm)
 {
     _date = tm;
 }
-
 time_t Date::getDate()
 {
     return _date;
 }
-
 string Date::getStringDate()
 {
     char str[60];
@@ -888,31 +716,25 @@ string Date::getStringDate()
     sprintf(str, "%02d.%02d.%04d %02d:%02d", m->tm_mday,m->tm_mon+1,m->tm_year+1900,m->tm_hour,m->tm_min);
     return str;
 }
-
 Date::Date()
 {
     _date = time(0);
 }
-
 Date::Date(time_t t)
 {
     setDate(t);
 }
-
 Date::Date(tm atm)
 {
    _date = mktime(&atm);
 }
-
 ostream& operator<<(ostream& out, Date& date)
 {
     return out << date._date;
 }
-
 istream& operator>>(istream& in, Date& date)
 {
     time_t temp = date._date;
-
     in >> temp;
     if (!cin.fail())
     {
@@ -920,52 +742,38 @@ istream& operator>>(istream& in, Date& date)
     }
     return in;
 }
-
 bool operator==(const Date& d1, const Date& d2)
 {
     return (d1._date == d2._date);
 }
-
 bool operator!=(const Date& d1, const Date& d2)
 {
     return !(d1 == d2);
 }
-
 bool operator>(const Date& d1, const Date& d2)
 {
     return d1._date > d2._date;
 }
-
 bool operator>=(const Date& d1, const Date& d2)
 {
     return d1._date >= d2._date;
 }
-
 bool operator<(const Date& d1, const Date& d2)
 {
     return d1._date < d2._date;
 }
-
 bool operator<=(const Date& d1, const Date& d2)
 {
     return d1._date <= d2._date;
 }
-
 void operator+=(Date& d1, Date& d2)
 {
     d1.setDate(d1.getDate() + d2.getDate());
 }
-
 void operator+=(Date& d1, time_t t)
 {
     d1.setDate(d1.getDate() + t);
 }
-
-
-
-
-
-
 Document::Document()
 {
     _date = time(0);
@@ -973,7 +781,6 @@ Document::Document()
     _title = "None title";
     _content = "None title";
 }
-
 Document::Document(Date date, string author, string title, string content)
 {
     _date = date;
@@ -981,7 +788,6 @@ Document::Document(Date date, string author, string title, string content)
     _title = title;
     _content = content;
 }
-
 void Document::printMinInfo()
 {
     string tempTitle = _title;
@@ -989,7 +795,6 @@ void Document::printMinInfo()
     
     int sizeTitle = 25;
     int sizeAuthor = 10;
-
     if (tempTitle.length() > sizeTitle)
     {
         tempTitle[sizeTitle-4] = '.';
@@ -1004,10 +809,8 @@ void Document::printMinInfo()
         tempAuthor[sizeAuthor - 2] = '.';
         tempAuthor[sizeAuthor - 1] = '\0';
     }
-
     printf("%25s %10s %16s", tempTitle.c_str(), tempAuthor.c_str(), _date.getStringDate().c_str());
 }
-
 void InputDocument::printFullInfo()
 {
     cout << "Отправлено: " << parseStringToSpace(_date.getStringDate()) <<  endl;
@@ -1016,19 +819,14 @@ void InputDocument::printFullInfo()
     cout << "Содержание: " << endl << parseStringToSpace(_content) << endl;
     cout << "Ответить до: " << parseStringToSpace(_dateReply.getStringDate()) << endl;
 }
-
-
-
 InputDocument::InputDocument():Document()
 {
     _dateReply += _MONTH;
 }
-
 InputDocument::InputDocument(Date date, string author, string title, string content): Document(date, author, title, content)
 {
     _dateReply += _MONTH;
 }
-
 void InputDocument::setTimeToReply(int days, int hours, int minutes)
 {
     int d = 0, h = 0, m = 0;
@@ -1046,9 +844,7 @@ void InputDocument::setTimeToReply(int days, int hours, int minutes)
     }
     _dateReply += time_t((time_t)d * 86400 + (time_t)h * 3600 + (time_t)m * 60);
     _dateReply += -_MONTH;
-
 }
-
 void OutputDocument::printFullInfo()
 {
     cout << "Отправлено: " << _date.getStringDate() << endl;
@@ -1057,35 +853,26 @@ void OutputDocument::printFullInfo()
     cout << "Тема: " << parseStringToSpace(_title) << endl;
     cout << "Содержание: " << endl << parseStringToSpace(_content) << endl;
 }
-
-
 OutputDocument::OutputDocument()
 {
-
 }
-
 OutputDocument::OutputDocument(Date date, string author, string title, string content, string rank) : Document(date, author, title, content)
 {
     setRank(rank);
 }
-
 void OutputDocument::setRank(string rank)
 {
     this->_rank = rank;
 }
-
 string OutputDocument::getRank()
 {
     return _rank;
 }
-
-
 Dispatch::Dispatch(int id, InputDocument inputDocument)
 {
     _id = id;
     _inDoc = inputDocument;
 }
-
 Dispatch::Dispatch(int id, InputDocument inputDocument, OutputDocument outputDocument)
 {
     _id = id;
@@ -1093,13 +880,11 @@ Dispatch::Dispatch(int id, InputDocument inputDocument, OutputDocument outputDoc
     _outDoc = outputDocument;
     _isReply = true;
 }
-
 void Dispatch::addReply(OutputDocument outputDocument)
 {
     _outDoc = outputDocument;
     _isReply = true;
 }
-
 void Dispatch::Print()
 {
     printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||%03d|||||||||||||||||||||||||||||||||||||||||||||||||||||\n", _id);
@@ -1113,7 +898,6 @@ void Dispatch::Print()
     }
     printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
 }
-
 void Dispatch::PrintMinimal()
 {
     printf("%03d",_id);
@@ -1131,4 +915,3 @@ void Dispatch::PrintMinimal()
     cout << "|";
     cout << endl;
 }
-
