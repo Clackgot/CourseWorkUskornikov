@@ -445,8 +445,7 @@ public:
                 fp >> theme;
                 fp >> content;
                 fp >> replyDate;
-                addDispatch(Dispatch(id,
-                                InputDocument(Date(tm), parseStringToSpace(author), parseStringToSpace(theme), parseStringToSpace(content), Date(replyDate))));
+                addDispatch(Dispatch(id,InputDocument(Date(tm), parseStringToSpace(author), parseStringToSpace(theme), parseStringToSpace(content), Date(replyDate))));
             }
         }
         fp.close();
