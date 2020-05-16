@@ -34,11 +34,6 @@ string getText(string msg)
     cout << msg;
     while (true)
     {
-        /*
-        m:
-        getline(cin, temp);
-        if (temp == "")goto m;
-        */
         while(temp == "")getline(cin, temp);
 
         if (temp == "")
