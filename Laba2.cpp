@@ -15,6 +15,7 @@ string parseStringToSpace(string str)
     for (auto& it : str)
     {
         if (it == '_') it = ' ';
+        if (it == '~') it = ',';
     }
     return str;
 }
@@ -23,16 +24,19 @@ string parseStringToUnderline(string str)
     for (auto& it : str)
     {
         if (it == ' ') it = '_';
+        if (it == ',') it = '~';
     }
     return str;
 }
 string getText(string msg)
 {
+    string temp = "";
+    cout << msg;
     while (true)
     {
-        string temp = "";
-        cout << msg;
+        m:
         getline(cin, temp);
+        if (temp == "")goto m;
         if (temp == "")
         {
             cin.clear();
@@ -147,7 +151,10 @@ public:
     void printFullInfo();
     InputDocument();
     InputDocument(Date date, string author, string title, string content);
-    InputDocument(Date date, string author, string title, string content, Date dateReply) :InputDocument(date, author, title, content) { setTimeToReply(dateReply.getDate()); };
+    InputDocument(Date date, string author, string title, string content, Date dateReply):InputDocument(date, author, title, content)
+    {
+        _dateReply = dateReply;
+    }
     void setTimeToReply(int days, int hours, int minutes);
     void setTimeToReply(time_t Date)
     {
@@ -161,7 +168,7 @@ public:
     {
         string response = "";
         response += Document::getSuchString();
-        response += to_string(_date.getDate());
+        response += to_string(_dateReply.getDate());
         return response;
     }
 };
@@ -580,7 +587,7 @@ public:
     {
         system("cls");
         int id = 0;
-        string title = "", content = "";
+        string title1 = "", content = "";
         id = getValue<int>("ID корреспонденции:");
         if (!correspond.idExsist(id))
         {
@@ -588,10 +595,11 @@ public:
             system("pause");
             return -1;
         }
-        title = getText("Тема:");
+        
+        title1 = getText("Тема:");
         content = getText("Содержание:");
         
-        correspond.replyToDispatch(id, OutputDocument(time(0),author,title,content,rank));
+        correspond.replyToDispatch(id, OutputDocument(time(0),author,title1,content,rank));
         system("pause");
         return 0;
     }
@@ -665,7 +673,7 @@ int main()
         case 2:
             system("cls");
             printf("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
-            tempAuthor = getText("Ваше имя:");
+            nameStaff = getText("Ваше имя:");
             rankStaff = getText("Должность:");
             do
             {
@@ -808,7 +816,7 @@ void Document::printMinInfo()
         tempAuthor[sizeAuthor - 2] = '.';
         tempAuthor[sizeAuthor - 1] = '\0';
     }
-    printf("%25s %10s %16s", tempTitle.c_str(), tempAuthor.c_str(), _date.getStringDate().c_str());
+    printf("%25s %10s %16s", parseStringToSpace(tempTitle).c_str(), parseStringToSpace(tempAuthor).c_str(), _date.getStringDate().c_str());
 }
 void InputDocument::printFullInfo()
 {
